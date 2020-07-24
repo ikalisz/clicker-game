@@ -1,5 +1,6 @@
 import React, {
   useState,
+  useEffect,
 } from 'react'
 import styled from 'styled-components'
 
@@ -9,10 +10,6 @@ function Home() {
     setWaifus,
   ] = useState(0)
   const [
-    isLoading,
-    setLoading,
-  ] = useState(false)
-  const [
     clickPower,
     setClickPower,
   ] = useState(1)
@@ -20,9 +17,39 @@ function Home() {
     cpUpgrade,
     setCPUpgrade,
   ] = useState(30)
+  const [
+    passiveIncome,
+    setPassiveIncome,
+  ] = useState(0)
+  const [
+    sideCharacter,
+    setSideCharacter,
+  ] = useState(1)
+  const [
+    scUpgrade,
+    setSCUpgrade,
+  ] = useState(40)
 
-  if(isLoading) {
-    return
+  useEffect(() => {
+    const handlePassiveIncome = (waifus, passiveIncome) => {
+      console.log('here')
+      let newWaifus = waifus + passiveIncome
+      setWaifus(newWaifus)
+    }
+    const interval = window.setInterval(handlePassiveIncome, 500, waifus, passiveIncome)
+    return window.clearInterval(interval) 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  })
+
+  const handleUpgrade = (upgrade, upgradeTime, setUpgrade, setUpgradeTime) => {
+    let newWaifus = waifus - upgrade
+    let newUpgrade = upgrade * (1 / upgradeTime * upgradeTime + 1)
+    let newPassive = (passiveIncome - upgrade) + newUpgrade
+    let newUpgradeTime = upgradeTime + 1
+    setWaifus(newWaifus)
+    setUpgradeTime(newUpgradeTime)
+    setUpgrade(newUpgrade)
+    setPassiveIncome(newPassive)
   }
 
   const handleClick = (modifier) => {
@@ -45,7 +72,9 @@ function Home() {
     setClickPower(newCP)
   }
 
+  
   const cpUpgradeAvailable = waifus >= cpUpgrade
+  const scUpgradeAvailable = waifus >= scUpgrade
 
   const clickerComponent = waifus <= 100 ?
     'https://cdn.discordapp.com/attachments/565367162542358538/612932010654171156/Re1.png': waifus <= 200 ?
@@ -61,36 +90,26 @@ function Home() {
           onClick={() => handleClick(clickPower)}
         />
         <SWaifus>
-          {waifus}
+          {waifus} Waifus
         </SWaifus>
-        <div>
-          <button
-            style={{
-              display: 'none',
-            }}
-            onClick={setLoading}
-          >
-            Ignore me
-          </button>
-          <button
-            style={{
-              display: 'none',
-            }}
-            onClick={setClickPower}
-          >
-            Ignore me
-          </button>
-        </div>
       </SClickerContainer>
       <SUpgradeContainer>
-          <SCPUpgrade
-            cpUpgradeAvailable={cpUpgradeAvailable}
+          <SUpgradeWrapper
+            upgradeAvailable={cpUpgradeAvailable}
             onClick={cpUpgradeAvailable ? handleCPUpgrade : handleNoAffordUpgrade}
           >
             <SUpgrade>
               Click Power Upgrade: {cpUpgrade} waifus
             </SUpgrade>
-          </SCPUpgrade>
+          </SUpgradeWrapper>
+          <SUpgradeWrapper
+            upgradeAvailable={scUpgradeAvailable}
+            onClick={scUpgradeAvailable ? () => handleUpgrade(scUpgrade, sideCharacter, setSCUpgrade, setSideCharacter) : handleNoAffordUpgrade}
+          >
+            <SUpgrade>
+              Upgrade Side Character
+            </SUpgrade>
+          </SUpgradeWrapper>
       </SUpgradeContainer>
     </SContainer>
   )
@@ -127,14 +146,16 @@ const SUpgradeContainer = styled.div`
   align-items: right;
 `
 
-const SCPUpgrade = styled.div`
+const SUpgradeWrapper = styled.div`
   height: 100px;
   width: 200px;
   border: 1px black;
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: ${(props) => props.cpUpgradeAvailable ? 1 : .3};
+  opacity: ${(props) => props.upgradeAvailable ? 1 : .3};
+  border: 1px black solid;
+  padding: 0 20px;
 `
 
 const SUpgrade = styled.p`
