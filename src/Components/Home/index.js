@@ -37,6 +37,24 @@ function Home() {
       <SWaifus>
         {waifus}
       </SWaifus>
+      <div>
+        <button
+          style={{
+            display: 'none',
+          }}
+          onCLick={setLoading}
+        >
+          Ignore me
+        </button>
+        <button
+          style={{
+            display: 'none',
+          }}
+          setClickPower
+        >
+          Ignore me
+        </button>
+      </div>
     </SContainer>
   )
 }
