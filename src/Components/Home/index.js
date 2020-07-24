@@ -15,7 +15,7 @@ function Home() {
   const [
     clickPower,
     setClickPower,
-  ] = useState(1)
+  ] = useState(5)
 
   if(isLoading) {
     return
@@ -29,9 +29,16 @@ function Home() {
     return
   }
 
+  const clickerComponent = waifus <= 100 ?
+    'https://cdn.discordapp.com/attachments/565367162542358538/612932010654171156/Re1.png': waifus <= 200 ?
+    'https://cdn.discordapp.com/attachments/565367162542358538/612931972179689472/No1.png': waifus <= 300 ?
+    'https://cdn.discordapp.com/attachments/565367162542358538/612931930895417346/An1.png': 'https://cdn.discordapp.com/attachments/565367162542358538/612931820794806272/LikeyLurk_112.png'
+
   return (
     <SContainer>
       <SClicker
+        src={clickerComponent}
+        alt="iiLikey's OC"
         onClick={() => handleClick(clickPower)}
       />
       <SWaifus>
@@ -69,11 +76,7 @@ const SContainer = styled.div`
   width: 100vw;
 `
 
-const SClicker = styled.button`
-  height: 100px;
-  width: 100px;
-  border-widht: 1px;
-  border-color: grey;
+const SClicker = styled.img`
 `
 
 const SWaifus = styled.p`
