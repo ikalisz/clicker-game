@@ -42,7 +42,7 @@ function Home() {
           style={{
             display: 'none',
           }}
-          onCLick={setLoading}
+          onClick={setLoading}
         >
           Ignore me
         </button>
@@ -50,7 +50,7 @@ function Home() {
           style={{
             display: 'none',
           }}
-          setClickPower
+          onClick={setClickPower}
         >
           Ignore me
         </button>
